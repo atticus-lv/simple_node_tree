@@ -7,6 +7,7 @@ from ._runtime import cache_socket_links, cache_socket_variables
 
 # some method from rigging_node
 class SocketBase():
+    compatible_sockets = []
 
     # reroute method
     ###########################
@@ -21,6 +22,10 @@ class SocketBase():
         accessing links Takes O(len(nodetree.links)) time.
         '''
 
+        def set_valid(socket, is_valid=False):
+            if socket.links:
+                socket.links[0].is_valid = is_valid
+
         _nodetree_socket_connections = cache_socket_links.setdefault(self.id_data, {})
         _connected_socket = _nodetree_socket_connections.get(self, None)
 
@@ -28,20 +33,56 @@ class SocketBase():
             return _connected_socket
 
         socket = self
+
         if socket.is_output:
             while socket.is_linked and socket.links[0].to_node.bl_rna.name == 'Reroute':
                 socket = socket.links[0].to_node.outputs[0]
             if socket.is_linked:
                 _connected_socket = socket.links[0].to_socket
+
         else:
             while socket.is_linked and socket.links[0].from_node.bl_rna.name == 'Reroute':
                 socket = socket.links[0].from_node.inputs[0]
             if socket.is_linked:
                 _connected_socket = socket.links[0].from_socket
 
+            # set link
+            if not socket.is_socket_compatible(_connected_socket):
+                set_valid(socket, False)
+            # return the last right socket
+
         cache_socket_links[self.id_data][self] = _connected_socket
 
         return _connected_socket
+
+    # UI display
+    ###################
+
+    # Link valid
+    def is_socket_compatible(self, other_socket):
+        if other_socket.bl_idname == 'NodeSocketVirtual':
+            return True
+        return other_socket.bl_idname == self.bl_idname or other_socket.bl_idname in self.compatible_sockets
+
+    @property
+    def ui_value(self):
+        '''use for output ui display'''
+        val = self.get_value()
+        if val is None: return 'None'
+
+        if isinstance(val, bpy.types.Object) or isinstance(val, bpy.types.Material) or isinstance(val, bpy.types.World):
+            return val.name
+        elif isinstance(val, str) or isinstance(val, int):
+            return f'{val}'
+        elif isinstance(val, float):
+            return f'{round(val, 2)}'
+        elif isinstance(val, tuple) or isinstance(val, Vector):
+            d_val = [round(num, 2) for num in list(val)]
+            return f'{d_val}'
+        elif isinstance(val, bool):
+            return 'True' if val else 'False'
+        else:
+            return f'{val}'
 
     # set and get method
     #########################
@@ -75,44 +116,6 @@ class SocketBase():
 
         return _value
 
-    @property
-    def ui_value(self):
-        '''use for output ui display'''
-        val = self.get_value()
-        if val is None: return 'None'
-
-        if isinstance(val, bpy.types.Object) or isinstance(val, bpy.types.Material) or isinstance(val, bpy.types.World):
-            return val.name
-        elif isinstance(val, str) or isinstance(val, int):
-            return f'{val}'
-        elif isinstance(val, float):
-            return f'{round(val, 2)}'
-        elif isinstance(val, tuple) or isinstance(val, Vector):
-            d_val = [round(num, 2) for num in list(val)]
-            return f'{d_val}'
-        elif isinstance(val, bool):
-            return 'True' if val else 'False'
-        else:
-            return f'{val}'
-
-    def remove_incorrect_links(self):
-        '''
-        Removes the invalid links from the socket when the tree in updated
-        There is no visual indication for incorrect custom sockets other than removing the invalid links
-        '''
-        if self.node.id_data in cache_socket_links:
-            del cache_socket_links[self.node.id_data]
-        connected_socket = self.connected_socket
-
-        if connected_socket:
-            self.unlink()
-
-    def unlink(self):
-        '''Unlinks the socket'''
-        if self.links:
-            print('remove:', self.links[0].from_node, self.links[0].to_node)
-            self.id_data.links.remove(self.links[0])
-
 
 def update_node(self, context):
     try:
@@ -126,6 +129,8 @@ class SimpleNodeSocket(bpy.types.NodeSocket, SocketBase):
     bl_label = 'SimpleNodeSocket'
 
     socket_color = (0.5, 0.5, 0.5, 1)
+
+    compatible_sockets = ['SimpleNodeSocketResult']
 
     text: StringProperty(default='')
     default_value: IntProperty(default=0, update=update_node)
@@ -144,7 +149,7 @@ class SimpleNodeSocket(bpy.types.NodeSocket, SocketBase):
         if self.is_linked or self.is_output:
             layout.label(text=self.display_name)
         else:
-            col.prop(self, 'default_value', text=self.display_name) # column for vector
+            col.prop(self, 'default_value', text=self.display_name)  # column for vector
 
     def draw_color(self, context, node):
         return self.socket_color
@@ -207,6 +212,20 @@ class SimpleNodeSocketXYZ(SimpleNodeSocketVector, SocketBase):
                                        update=update_node)
 
 
+class SimpleNodeSocketResult(SimpleNodeSocket, SocketBase):
+    bl_idname = 'SimpleNodeSocketResult'
+    bl_label = 'SimpleNodeSocketResult'
+
+    socket_color = (1, 1, 1, 0.5)
+
+    compatible_sockets = [SimpleNodeSocket.bl_idname,
+                          SimpleNodeSocketBool.bl_idname,
+                          SimpleNodeSocketInt.bl_idname,
+                          SimpleNodeSocketFloat.bl_idname,
+                          SimpleNodeSocketString.bl_idname,
+                          SimpleNodeSocketXYZ.bl_idname, ]
+
+
 classes = (
     SimpleNodeSocket,
     SimpleNodeSocketBool,
@@ -215,6 +234,7 @@ classes = (
     SimpleNodeSocketString,
 
     SimpleNodeSocketXYZ,
+    SimpleNodeSocketResult,
 )
 
 

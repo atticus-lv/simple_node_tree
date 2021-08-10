@@ -9,9 +9,9 @@ class SimpleNodeFloatToVector(SimpleNodeBase):
     bl_label = 'Float to Vector'
 
     def init(self, context):
-        self.create_input('SimpleNodeSocketFloat', 'value1', 'Boolean')
-        self.create_input('SimpleNodeSocketFloat', 'value2', 'Boolean')
-        self.create_input('SimpleNodeSocketFloat', 'value3', 'Boolean')
+        self.create_input('SimpleNodeSocketFloat', 'value1', 'Value')
+        self.create_input('SimpleNodeSocketFloat', 'value2', 'Value')
+        self.create_input('SimpleNodeSocketFloat', 'value3', 'Value')
         self.create_output('SimpleNodeSocketXYZ', 'output', "Output")
 
     def process(self, context, id, path):

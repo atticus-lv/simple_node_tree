@@ -73,8 +73,6 @@ class SimpleNodeBase(bpy.types.Node):
         if runtime_info['updating'] is True:
             return
 
-        # for input in self.inputs:
-        #     input.remove_incorrect_links()
 
     def get_dependant_nodes(self):
         '''returns the nodes connected to the inputs of this node'''

@@ -9,9 +9,9 @@ def update_node(self, context):
     self.execute_tree()
 
 
-class SimpleNodeFunction(SimpleNodeBase):
-    bl_idname = 'SimpleNodeFunction'
-    bl_label = 'Math Function'
+class SimpleNodeFunctions(SimpleNodeBase):
+    bl_idname = 'SimpleNodeFunctions'
+    bl_label = 'Functions'
 
     operate_type: EnumProperty(
         name='Type',
@@ -40,8 +40,8 @@ class SimpleNodeFunction(SimpleNodeBase):
 
 
 def register():
-    bpy.utils.register_class(SimpleNodeFunction)
+    bpy.utils.register_class(SimpleNodeFunctions)
 
 
 def unregister():
-    bpy.utils.unregister_class(SimpleNodeFunction)
+    bpy.utils.unregister_class(SimpleNodeFunctions)

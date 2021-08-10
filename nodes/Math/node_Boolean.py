@@ -16,7 +16,7 @@ def update_node(self, context):
 
 class SimpleNodeBoolean(SimpleNodeBase):
     bl_idname = 'SimpleNodeBoolean'
-    bl_label = 'Math Boolean'
+    bl_label = 'Boolean Math'
 
     operate_type: EnumProperty(
         name='Type',

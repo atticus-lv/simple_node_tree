@@ -18,7 +18,7 @@ def update_node(self, context):
 
 class SimpleNodeComparison(SimpleNodeBase):
     bl_idname = 'SimpleNodeComparison'
-    bl_label = 'Math Comparison'
+    bl_label = 'Comparison'
 
     operate_type: EnumProperty(
         name='Type',

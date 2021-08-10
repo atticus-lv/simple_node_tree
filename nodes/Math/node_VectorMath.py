@@ -23,7 +23,7 @@ def update_node(self, context):
 
 class SimpleNodeVectorMath(SimpleNodeBase):
     bl_idname = 'SimpleNodeVectorMath'
-    bl_label = 'Math Vector'
+    bl_label = 'Vector Math'
 
     operate_type: EnumProperty(
         name='Type',

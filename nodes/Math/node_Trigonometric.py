@@ -10,7 +10,7 @@ def update_node(self, context):
 
 class SimpleNodeTrigonometric(SimpleNodeBase):
     bl_idname = 'SimpleNodeTrigonometric'
-    bl_label = 'Math Trigonometric'
+    bl_label = 'Trigonometric'
 
     operate_type: EnumProperty(
         name='Type',

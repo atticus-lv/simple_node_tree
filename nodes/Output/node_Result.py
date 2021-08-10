@@ -21,14 +21,14 @@ class SimpleNodeResult(SimpleNodeBase):
     bl_label = 'Result'
 
     default_value: StringProperty(default='Need Update', name='Result Value')
-    precision: IntProperty(name='Float Precision', default=3, update=set_active_output)
+    precision: IntProperty(name='Precision', default=3, update=set_active_output)
     # set active and update
     set_as_output: BoolProperty(default=False,
                                 update=set_active_output,
                                 description='Set as active output')
 
     def init(self, context):
-        self.create_input('SimpleNodeSocketFloat', 'input', 'Input')
+        self.create_input('SimpleNodeSocketResult', 'input', 'Input')
         self.width = 200
 
     def draw_buttons(self, context, layout):

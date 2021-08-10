@@ -10,7 +10,7 @@ def update_node(self, context):
 
 class SimpleNodeConversion(SimpleNodeBase):
     bl_idname = 'SimpleNodeConversion'
-    bl_label = 'Math Conversion'
+    bl_label = 'Conversion'
 
     operate_type: EnumProperty(
         name='Type',

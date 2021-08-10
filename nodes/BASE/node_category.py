@@ -14,7 +14,7 @@ node_categories = [
     ]),
 
     SimpleNodeCategory("MATH", "Math", items=[
-        nodeitems_utils.NodeItem("SimpleNodeFunction"),
+        nodeitems_utils.NodeItem("SimpleNodeFunctions"),
         nodeitems_utils.NodeItem("SimpleNodeTrigonometric"),
         nodeitems_utils.NodeItem("SimpleNodeComparison"),
         nodeitems_utils.NodeItem("SimpleNodeConversion"),
@@ -22,7 +22,7 @@ node_categories = [
         nodeitems_utils.NodeItem("SimpleNodeVectorMath"),
     ]),
 
-    SimpleNodeCategory("UTILS", "Utils", items=[
+    SimpleNodeCategory("UTILITIES", "Utilities", items=[
         nodeitems_utils.NodeItem("SimpleNodeVectorToFloat"),
         nodeitems_utils.NodeItem("SimpleNodeFloatToVector"),
     ]),
