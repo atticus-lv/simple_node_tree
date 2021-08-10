@@ -66,7 +66,7 @@ class SimpleNodeVectorMath(SimpleNodeBase):
         elif self.operate_type == 'normalized':
             self.outputs[0].set_value(s1.normalized())
         elif self.operate_type == 'length':
-            self.outputs[0].set_value(s1.length())
+            self.outputs['output_value'].set_value(s1.length)
 
 
 def register():

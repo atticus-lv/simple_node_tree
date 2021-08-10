@@ -46,10 +46,9 @@ class SocketBase():
             if socket.is_linked:
                 _connected_socket = socket.links[0].from_socket
 
-            # set link
-            if not socket.is_socket_compatible(_connected_socket):
-                set_valid(socket, False)
-            # return the last right socket
+                # set link
+                if not socket.is_socket_compatible(_connected_socket):
+                    set_valid(socket, False)
 
         cache_socket_links[self.id_data][self] = _connected_socket
 

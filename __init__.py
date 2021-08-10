@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Simple Node",
     "author": "Atticus",
-    "version": (0, 1),
+    "version": (0, 2),
     "blender": (2, 93, 0),
     "location": "Node Editor > Simple Editor",
     "description": "Custom Node tree example",
