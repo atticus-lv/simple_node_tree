@@ -146,7 +146,11 @@ class SimpleNodeBase(bpy.types.Node):
     # update the build-in values with update the hole tree
     def execute_tree(self):
         cache_executed_nodes.clear()
-        self.id_data.execute(bpy.context)
+        if runtime_info['executing']:
+            return
+
+        if bpy.context.scene.sp_viewer_tree is not None:
+            bpy.context.scene.sp_viewer_tree.execute(bpy.context)
 
     def process(self, context, id, path):
         """node method"""

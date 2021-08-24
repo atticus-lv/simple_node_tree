@@ -12,6 +12,7 @@ def set_active_output(self, context):
 
         # set active output
         bpy.context.window_manager.sp_viewer_node = self.name
+        bpy.context.scene.sp_viewer_tree = self.id_data
         self.execute_tree()
 
 
@@ -53,8 +54,10 @@ class SimpleNodeResult(SimpleNodeBase):
 def register():
     bpy.utils.register_class(SimpleNodeResult)
     bpy.types.WindowManager.sp_viewer_node = StringProperty(name='Viewer output name')
+    bpy.types.Scene.sp_viewer_tree = PointerProperty(name='Viewer output tree', type=bpy.types.NodeTree)
 
 
 def unregister():
     bpy.utils.unregister_class(SimpleNodeResult)
     del bpy.types.WindowManager.sp_viewer_node
+    del bpy.types.Scene.sp_viewer_tree
